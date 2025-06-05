@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>購物車加減功能</title>
+  <style>
+    button {
+      margin: 5px;
+      padding: 5px 10px;
+      font-size: 16px;
+    }
+    #total {
+      font-weight: bold;
+      font-size: 22px;
+      margin-top: 15px;
+    }
+    .product {
+      margin-bottom: 30px;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 10px;
+    }
+    .quantity {
+      font-size: 18px;
+      margin: 0 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>購物車總額: <span id="total">$0</span></h2>
+  <button onclick="clearCart()">清空購物車</button>
+
+  <div class="product" id="product1">
+    <h3>商品1</h3>
+    <img src="instant-noodle-64d46422e4ac8.avif" alt="商品1圖片" width="250"><br>
+    <p>$100</p>
+    <button onclick="changeQuantity('product1', -1)">-</button>
+    <span class="quantity" id="qty_product1">0</span>
+    <button onclick="changeQuantity('product1', 1)">+</button>
+  </div>
+
+  <div class="product" id="product2">
+    <h3>商品2</h3>
+    <img src="noodles-4.jpg" alt="商品2圖片" width="250"><br>
+    <p>$120</p>
+    <button onclick="changeQuantity('product2', -1)">-</button>
+    <span class="quantity" id="qty_product2">0</span>
+    <button onclick="changeQuantity('product2', 1)">+</button>
+  </div>
+
+  <script>
+    // 商品價格表
+    const prices = {
+      product1: 100,
+      product2: 120
+    };
+
+    // 初始商品數量（從 localStorage 讀取或預設為 0）
+    let cart = JSON.parse(localStorage.getItem('cart')) || {
+      product1: 0,
+      product2: 0
+    };
+
+    function updateDisplay() {
+      // 更新數量文字
+      document.getElementById('qty_product1').textContent = cart.product1;
+      document.getElementById('qty_product2').textContent = cart.product2;
+
+      // 計算總價
+      let total = (cart.product1 * prices.product1) + (cart.product2 * prices.product2);
+      document.getElementById('total').textContent = `$${total}`;
+    }
+
+    function changeQuantity(productId, change) {
+      if (cart[productId] + change >= 0) {
+        cart[productId] += change;
+        localStorage.setItem('cart', JSON.stringify(cart));
+        console.log(`${productId} 數量變更為 ${cart[productId]}`);
+        updateDisplay();
+      }
+    }
+
+    function clearCart() {
+      cart = { product1: 0, product2: 0 };
+      localStorage.setItem('cart', JSON.stringify(cart));
+      updateDisplay();
+    }
+
+    // 載入時更新畫面
+    updateDisplay();
+  </script>
+
+</body>
+</html>
+
+    
